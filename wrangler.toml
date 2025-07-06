@@ -1,0 +1,13 @@
+name = "cloudflare-worker-for-backblaze-b2"
+main = "worker.js"
+compatibility_date = "2025-07-05"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# 用于S3兼容存储认证的AWS访问密钥ID。
+AWS_ACCESS_KEY_ID = "your-aws-access-key-id"
+# 用于S3兼容存储认证的AWS秘密访问密钥。
+AWS_SECRET_ACCESS_KEY = "your-aws-secret-access-key"
+# S3端点URL。对于AWS S3，通常是"https://your-bucket-name.s3.your-region.amazonaws.com"。
+# 对于BackBlaze B2，这将是你的S3兼容端点，例如"https://s3.us-west-002.backblazeb2.com/your-bucket-name"。
+AWS_S3_ENDPOINT = "https://your-bucket-name.s3.your-region.amazonaws.com"

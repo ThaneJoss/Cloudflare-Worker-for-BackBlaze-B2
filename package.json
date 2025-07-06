@@ -1,0 +1,12 @@
+{
+  "name": "cloudflare-worker-for-backblaze-b2",
+  "description": "Cloudflare Worker for proxying S3-compatible storage (e.g., BackBlaze B2).",
+  "main": "worker.js",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "start": "wrangler dev"
+  },
+  "dependencies": {
+    "aws4fetch": "^1.0.0"
+  }
+}
