@@ -30,8 +30,30 @@ async function handleRequest(request, env) {
   const upstreamUrl = new URL(s3Endpoint)
   upstreamUrl.pathname += url.pathname // 附加传入请求的路径
 
-  // 创建一个新请求发送到 S3 服务，保留原始请求头和请求体
-  const upstreamRequest = new Request(upstreamUrl, request)
+  // 创建一个新请求发送到 S3 服务，只保留必要的请求头以最小化签名范围
+  const excludeHeaders = new Set([
+    'x-forwarded-proto',
+    'x-real-ip',
+    'accept-encoding',
+    'if-match',
+    'if-modified-since',
+    'if-none-match',
+    'if-range',
+    'if-unmodified-since',
+  ]);
+
+  const newHeaders = new Headers();
+  for (const [key, value] of request.headers.entries()) {
+    if (!excludeHeaders.has(key.toLowerCase()) && !key.toLowerCase().startsWith('cf-')) {
+      newHeaders.set(key, value);
+    }
+  }
+
+  const upstreamRequest = new Request(upstreamUrl, {
+    method: request.method,
+    headers: newHeaders,
+    body: request.body, // 确保请求体也被传递，例如对于 PUT/POST 请求
+  });
 
   // 使用 AWS Signature Version 4 签署上游请求
   const signedRequest = await aws.sign(upstreamRequest)
