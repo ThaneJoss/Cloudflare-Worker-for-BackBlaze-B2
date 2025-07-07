@@ -57,7 +57,6 @@ export default {
     const signedRequest = await aws.sign(upstreamRequest)
 
     // 从 S3 服务获取资源并将响应返回给客户端
-    console.log(`正在访问的真实地址: ${signedRequest.url}`);
-    return fetch(signedRequest)
+    return await fetch(signedRequest);
   }
 }
